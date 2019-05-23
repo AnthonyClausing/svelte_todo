@@ -1,5 +1,26 @@
 <script>
 	export let name;
+
+	let todos = [
+		{
+			id: 1,
+			completed: false,
+			title: 'Go to store',
+			editing: false,
+		},
+		{
+			id: 2,
+			completed: false,
+			title: 'Workout for 30 mins',
+			editing: false,
+		},
+		{
+			id: 3,
+			completed: false,
+			title: 'Take over the nearest Jack in the Box',
+			editing: false,
+		}
+	]
 </script>
 
 <style lang="scss">
@@ -85,38 +106,20 @@
 </style>
 
 <div class="container">
-	<img src={''} alt="svelte logo" class="logo"/>
+	<!-- <img src={''} alt="svelte logo" class="logo"/> -->
 	
 	<input type="text" class="todo-input" placeholder="What needs to be done" />
-
-	<div class="todo-item">
-		<div class="todo-item-left">
-			<input type="checkbox" >
-			<div class="todo-item-label">Todo Title</div>
+	{#each todos as todo, i }
+		<div class="todo-item">
+			<div class="todo-item-left">
+				<input type="checkbox" >
+				<div class="todo-item-label">{todo.title}</div>
+			</div>
+			<div class="remove-item">
+				&times;
+			</div>
 		</div>
-		<div class="remove-item">
-	 		&times;
-		</div>
-	</div>
-	<div class="todo-item">
-		<div class="todo-item-left">
-			<input type="checkbox" >
-			<div class="todo-item-label">Todo Title</div>
-		</div>
-		<div class="remove-item">
-	 		&times;
-		</div>
-	</div>
-	<div class="todo-item">
-		<div class="todo-item-left">
-			<input type="checkbox" >
-			<div class="todo-item-label">Todo Title</div>
-		</div>
-		<div class="remove-item">
-	 		&times;
-		</div>
-	</div>
-
+	{/each}
 	<div class="extra-container">
 		<div>
 			<label>
