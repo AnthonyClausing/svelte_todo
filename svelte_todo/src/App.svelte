@@ -2,6 +2,7 @@
 	const ENTER_KEY = 13;
 	const ESCAPE_KEY = 27;
 
+	let currentFilter = 'all';
 	let newTodo = '';
 	let todos = [
 		{
@@ -40,8 +41,26 @@
 
 	}
 	function deleteTodo(todoId){
-		todos = todos.filter( todo => todo.id != todoId)
+		todos = todos.filter( todo => todo.id != todoId);
 	}
+
+	function checkAllTodos(event){
+		todos = todos.map(todo => ({...todo, completed: event.target.checked}));
+	}
+	
+	function clearCompleted(){
+		todos = todos.filter(todo => !todo.completed);
+	}
+	function updateFilter(filter){
+		currentFilter = filter;
+	}
+
+	$: filteredTodos = currentFilter === 'all' 
+		? todos 
+		: currentFilter === 'completed' 
+			? todos.filter(todo => todo.completed) 
+			: todos.filter(todo => !todo.completed)
+	$: todosRemaining = todos.filter(todo => !todo.completed).length;
 </script>
 
 <style lang="scss">
@@ -131,11 +150,11 @@
 	
 	<input bind:value={newTodo} type="text" class="todo-input" placeholder="What needs to be done" 
 	on:keydown={addTodo}/>
-	{#each todos as todo, i }
+	{#each filteredTodos as todo, i }
 		<div class="todo-item">
 			<div class="todo-item-left">
-				<input type="checkbox" >
-				<div class="todo-item-label">{todo.title}</div>
+				<input type="checkbox" bind:checked={todo.completed}>
+				<div class="todo-item-label" class:completed={todo.completed}>{todo.title}</div>
 			</div>
 			<div class="remove-item" on:click={() => deleteTodo(todo.id)}>
 				&times;
@@ -145,23 +164,23 @@
 	<div class="extra-container">
 		<div>
 			<label>
-				<input type="checkbox">Check All
+				<input type="checkbox" on:change={checkAllTodos}>Check All
 			</label>
 		</div>
 		<div>
-			3 items left
+			{todosRemaining} items left
 		</div>
 	</div>
 	
 	<div class="extra-container">
 		<div>
-			<button>All</button>
-			<button>Active</button>
-			<button>Completed</button>
+			<button on:click={()=> updateFilter('all')}  class:active="{currentFilter === "all"}">All</button>
+			<button on:click={()=> updateFilter('active')} class:active="{currentFilter === "active"}">Active</button>
+			<button on:click={()=> updateFilter('completed')} class:active="{currentFilter === "completed"}">Completed</button>
 		</div>
 
 		<div>
-			<button>Clear Completed</button>
+			<button on:click={clearCompleted}>Clear Completed</button>
 		</div>
 	</div>
 </div>
