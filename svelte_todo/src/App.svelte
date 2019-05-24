@@ -1,6 +1,8 @@
 <script>
-	export let name;
+	const ENTER_KEY = 13;
+	const ESCAPE_KEY = 27;
 
+	let newTodo = '';
 	let todos = [
 		{
 			id: 1,
@@ -21,6 +23,25 @@
 			editing: false,
 		}
 	]
+
+	function addTodo(event){
+		if(event.which === ENTER_KEY){
+
+			todos = [...todos, {
+				id: todos.length + 1,
+				completed: false,
+				title: newTodo,
+				editing: false
+			}]
+
+			todos = todos;
+			newTodo = '';
+		}
+
+	}
+	function deleteTodo(todoId){
+		todos = todos.filter( todo => todo.id != todoId)
+	}
 </script>
 
 <style lang="scss">
@@ -108,14 +129,15 @@
 <div class="container">
 	<!-- <img src={''} alt="svelte logo" class="logo"/> -->
 	
-	<input type="text" class="todo-input" placeholder="What needs to be done" />
+	<input bind:value={newTodo} type="text" class="todo-input" placeholder="What needs to be done" 
+	on:keydown={addTodo}/>
 	{#each todos as todo, i }
 		<div class="todo-item">
 			<div class="todo-item-left">
 				<input type="checkbox" >
 				<div class="todo-item-label">{todo.title}</div>
 			</div>
-			<div class="remove-item">
+			<div class="remove-item" on:click={() => deleteTodo(todo.id)}>
 				&times;
 			</div>
 		</div>
