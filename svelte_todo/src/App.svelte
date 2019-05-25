@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	const ENTER_KEY = 13;
 	const ESCAPE_KEY = 27;
 
@@ -72,6 +73,12 @@
 	function updateFilter(filter){
 		currentFilter = filter;
 	}
+
+	onMount(async () => {
+		const res = await fetch("https://api.kanye.rest");
+		const response = await res.json();
+		console.log(response.quote);
+	});
 
 	$: filteredTodos = currentFilter === 'all' 
 		? todos 
