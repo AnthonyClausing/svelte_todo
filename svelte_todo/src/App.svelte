@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { fade, fly } from 'svelte/transition';
 	const ENTER_KEY = 13;
 	const ESCAPE_KEY = 27;
 
@@ -177,7 +178,7 @@
 	on:keydown={addTodo}/>
 	{#each filteredTodos as todo, i }
 		<div class="todo-item">
-			<div class="todo-item-left">
+			<div class="todo-item-left" transition:fade>
 				<input type="checkbox" bind:checked={todo.completed}>
 				{#if !todo.editing}
 					<div class="todo-item-label" class:completed={todo.completed} on:dblclick={() => editTodo(todo)}>{todo.title}</div>
