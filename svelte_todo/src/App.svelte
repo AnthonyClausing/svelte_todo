@@ -40,6 +40,23 @@
 		}
 
 	}
+
+	function editTodo(todo){
+		todo.editing = true;
+		todos = todos;
+	}
+
+	function doneEdit(todo){
+		todo.editing = false;
+		todos = todos;
+	}
+	
+	function doneEditKeyDown(todo, event){
+		if(event.which === ENTER_KEY){
+			doneEdit(todo);
+		}
+	}
+
 	function deleteTodo(todoId){
 		todos = todos.filter( todo => todo.id != todoId);
 	}
@@ -51,6 +68,7 @@
 	function clearCompleted(){
 		todos = todos.filter(todo => !todo.completed);
 	}
+
 	function updateFilter(filter){
 		currentFilter = filter;
 	}
@@ -154,7 +172,13 @@
 		<div class="todo-item">
 			<div class="todo-item-left">
 				<input type="checkbox" bind:checked={todo.completed}>
-				<div class="todo-item-label" class:completed={todo.completed}>{todo.title}</div>
+				{#if !todo.editing}
+					<div class="todo-item-label" class:completed={todo.completed} on:dblclick={() => editTodo(todo)}>{todo.title}</div>
+				{:else}
+					<input class="todo-item-edit" bind:value={todo.title} type="text" 
+					on:blur={() => doneEdit(todo)} 
+					on:keydown={() => doneEditKeyDown(todo, event)} autofocus>
+				{/if}
 			</div>
 			<div class="remove-item" on:click={() => deleteTodo(todo.id)}>
 				&times;
